@@ -2,7 +2,28 @@
   <app-header></app-header>
   <main #main class="main-content">
     <aside #sidebar class="sidebar">
-
+      <nav class="lateral-menu">
+        <ul>
+          <li>
+            <a [routerLinkActive]="['menu-active']" [routerLink]="'/dashboard'">
+              <div class="icon vista-general-icon" ></div>
+              <span>Vista General</span>
+            </a>
+          </li>
+          <li>
+            <a [routerLinkActive]="['menu-active']" [routerLink]="'/register'">
+              <div class="icon register-icon" ></div>
+              <span>Registro</span>
+            </a>
+          </li>
+          <li>
+            <a [routerLinkActive]="['menu-active']" [routerLink]="'/stats'">
+              <div class="icon reporte-icon" ></div>
+              <span>Reportes </span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </aside>
     <div class="content">
       <router-outlet></router-outlet>

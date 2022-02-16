@@ -18,6 +18,11 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'register',
+        loadChildren: () => import('../register/register.module').then((m) => m.RegisterModule),
+        pathMatch: 'full'
+      },
+      {
         path: 'stats',
         loadChildren: () => import('../stats/stats.module').then((m) => m.StatsModule),
         pathMatch: 'full'
