@@ -1,0 +1,13 @@
+<section class="header-container">
+  <mat-toolbar>
+    <div class="brand-container">
+      <div class="logo"></div>
+      <h1 class="ml-2">PARQUEO CAÑOTO</h1>
+    </div>
+    <span class="profile-container" *ngIf="{ session : session$|async} as state">
+      <div class="avatar"></div>
+      <p>{{state.session.fullname}}</p>
+      <button mat-button (click)="logout()"> Cerrar Session</button>
+    </span>
+  </mat-toolbar>
+</section>

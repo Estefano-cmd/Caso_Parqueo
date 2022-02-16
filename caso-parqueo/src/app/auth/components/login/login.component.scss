@@ -1,0 +1,43 @@
+.login-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #487BEA;
+  .login-card {
+    width: 400px;
+    border-radius: 1rem;
+    border: 1px solid black;
+    padding: 1em;
+    background-color: white;
+  }
+  .login-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .logo {
+      min-width: 50px;
+      min-height: 50px;
+      width: 50px;
+      height: 50px;
+      background-image: url("../../../../assets/images/ticket.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+    h1 {
+      margin-left: 1rem;
+    }
+  }
+
+  form {
+    margin-top: 3rem;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+}
