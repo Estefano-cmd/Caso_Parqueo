@@ -1,4 +1,4 @@
-import { Client } from './../types/Client';
+import { Client, ClientDTO } from './../types/Client';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -20,11 +20,11 @@ export class ClientService {
     return this.http.get<Client>(`${environment.endpoints}/client/${id}`);
   }
 
-  create(data: Client): Observable<null> {
+  create(data: ClientDTO): Observable<null> {
     return this.http.post<null>(`${environment.endpoints}/client`, data);
   }
 
-  update(id: number, data: Partial<Client>): Observable<null> {
+  update(id: number, data: Partial<ClientDTO>): Observable<null> {
     return this.http.patch<null>(`${environment.endpoints}/client/${id}`, data);
   }
 
