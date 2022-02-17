@@ -32,7 +32,7 @@ export class VehicleService {
     return this.http.patch<null>(`${environment.endpoints}/vehicle/${id}`, data);
   }
 
-  delete(id: number): Observable<Array<Vehicle>> {
-    return this.http.delete<Array<Vehicle>>(`${environment.endpoints}/vehicle/${id}`);
+  delete(id: number): Observable<null> {
+    return this.http.delete<null>(`${environment.endpoints}/vehicle/${id}`);
   }
 }

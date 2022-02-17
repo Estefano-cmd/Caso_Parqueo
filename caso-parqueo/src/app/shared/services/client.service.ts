@@ -28,7 +28,7 @@ export class ClientService {
     return this.http.patch<null>(`${environment.endpoints}/client/${id}`, data);
   }
 
-  delete(id: number): Observable<Array<Client>> {
-    return this.http.delete<Array<Client>>(`${environment.endpoints}/client/${id}`);
+  delete(id: number): Observable<null> {
+    return this.http.delete<null>(`${environment.endpoints}/client/${id}`);
   }
 }
