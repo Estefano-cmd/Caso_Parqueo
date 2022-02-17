@@ -1,1 +1,64 @@
-<p>register-page works!</p>
+<section class="register-container" *ngIf="{ data: data$|async} as state">
+  <div class="row">
+    <div class="col-6">
+      <h2>Placa de Vehículo</h2>
+      <mat-form-field  appearance="outline">
+        <input matInput type="search" color="accent" placeholder="123-AAA" autocomplete="off"
+          [formControl]="searchInput">
+      </mat-form-field>
+      <br>
+      <button class="search-btn" mat-flat-button color="accent" (click)="searchLicensePlate()">
+        Buscar
+      </button>
+      <button  class="ml-2" mat-flat-button color="primary" (click)="toAssign()">
+        Asignar
+      </button>
+    </div>
+    <div class="col-6">
+      <div class="placa-container">
+        <div class="placa-container-header">
+          <img class="bolivia-image" src="../../assets/images/bolivia.png" alt="image bolivia">
+          <h3>BOLIVIA</h3>
+        </div>
+        <div class="placa-container-content">
+          <h2>{{ this.searchInput?.value ? ( this.searchInput?.value|uppercase) : "--- ---" }}</h2>
+        </div>
+      </div>
+      <ng-container *ngIf="state.data?.vehicle === null; else data">
+        <div *ngIf="searchStarted" class="alert alert-error">
+          <span>Placa No Registada</span>
+        </div>
+      </ng-container>
+      <ng-template #data>
+        <div *ngIf="searchStarted" class="alert alert-success">
+          <span>Placa Registada</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <div *ngIf="searchStarted && state.data?.vehicle && state.data?.client">
+    <div class="row mt-4">
+      <div class="col-6"></div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            <h4>CLIENTE</h4>
+            <span>{{state.data?.client.name}} {{state.data?.client.surnames}}</span>
+          </div>
+          <div class="col-6">
+            <h4>CATEGORÍA</h4>
+            <span>Abonado VIP</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <h4>VEHÍCULO</h4>
+            <span class="d-block">Marca: {{state.data?.vehicle.marca}}</span>
+            <span class="d-block">Modelo: {{state.data?.vehicle.model}}</span>
+            <span class="d-block">Color: {{state.data?.vehicle.color}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

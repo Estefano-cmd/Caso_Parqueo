@@ -2,3 +2,18 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Bootstrap's mixing dependencies for Utilities
+@import "../node_modules/bootstrap/scss/mixins/deprecate";
+@import "../node_modules/bootstrap/scss/mixins/hover";
+@import "../node_modules/bootstrap/scss/mixins/text-emphasis";
+@import "../node_modules/bootstrap/scss/mixins/text-truncate";
+@import "../node_modules/bootstrap/scss/mixins/text-hide";
+// End
+@import "../node_modules/bootstrap/scss/bootstrap-grid";
+@import "../node_modules/bootstrap/scss/utilities/flex";
+@import "../node_modules/bootstrap/scss/utilities/sizing";
+@import "../node_modules/bootstrap/scss/utilities/display";
+@import "../node_modules/bootstrap/scss/utilities/text";
+@import "../node_modules/bootstrap/scss/utilities/visibility";
+@import "../node_modules/bootstrap/scss/utilities/spacing";

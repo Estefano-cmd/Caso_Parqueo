@@ -6,7 +6,7 @@
     </div>
     <span class="profile-container" *ngIf="{ session : session$|async} as state">
       <div class="avatar"></div>
-      <p>{{state.session.fullname}}</p>
+      <p>{{state?.session?.fullname}}</p>
       <button mat-button (click)="logout()"> Cerrar Session</button>
     </span>
   </mat-toolbar>

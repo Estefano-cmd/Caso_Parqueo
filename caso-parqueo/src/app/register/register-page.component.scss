@@ -1,0 +1,77 @@
+.register-container {
+  padding: 3em;
+}
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  div {
+    flex: 1;
+  }
+  .search-content__left {
+    border: 1px solid blue;
+  }
+  .search-content__right {
+    padding-left: 3em;
+    border: 1px solid red;
+  }
+}
+
+.search-btn {
+  color: black;
+  background-color: #F0C419;
+}
+
+.placa-container {
+  position: relative;
+  min-width: 250px;
+  width: 250px;
+  height: 100px;
+  border: 3px solid #466CBF;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.placa-container-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h3 {
+    color: #466CBF;
+    padding: 0;
+    margin: 0;
+    margin-top: 5px;
+    letter-spacing: 0.3rem;
+  }
+}
+
+.placa-container-content {
+  h2 {
+    margin-top: 12px;
+    font-size: 1.8rem;
+  }
+}
+
+.bolivia-image {
+  position: absolute;
+  min-width: 25px;
+  width: 25px;
+  height: 25px;
+  left: 10px;
+  top: 5px;
+}
+
+.alert {
+  margin-top: 10px;
+  width: 250px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.alert-success {
+  background-color: #CBECB1;
+}
+
+.alert-error {
+  background-color: #F19F9F;
+}
