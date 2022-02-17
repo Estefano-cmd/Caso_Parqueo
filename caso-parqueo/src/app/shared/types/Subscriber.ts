@@ -1,4 +1,4 @@
-export interface Subscripber {
+export interface Subscriber {
   id: number;
   email: string;
   direction:string;
