@@ -5,3 +5,5 @@ export interface Vehicle {
   marca: string;
   clientId: number;
 }
+
+export type VehicleDTO = Omit<Vehicle, 'id'>;

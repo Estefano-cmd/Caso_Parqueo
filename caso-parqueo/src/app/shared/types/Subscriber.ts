@@ -1,8 +1,10 @@
 export interface Subscriber {
   id: number;
   email: string;
-  direction:string;
+  direction: string;
   phone: number;
-  enabled: boolean,
+  enabled: boolean;
   clientId: number;
 }
+
+export type SubscriberDTO = Omit<Subscriber, 'id'>;

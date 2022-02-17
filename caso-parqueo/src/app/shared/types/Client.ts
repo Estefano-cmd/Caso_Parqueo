@@ -8,3 +8,5 @@ export interface Client {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type ClientDTO = Omit<Client, 'id'>;

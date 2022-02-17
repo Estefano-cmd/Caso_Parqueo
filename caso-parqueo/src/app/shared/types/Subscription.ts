@@ -5,3 +5,5 @@ export interface Subscription {
   subscriberId: number;
   subscriberTypeId: number;
 }
+
+export type SubscriptionDTO = Omit<Subscription, 'id'>;

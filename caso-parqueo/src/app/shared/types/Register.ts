@@ -1,7 +1,7 @@
 export interface Register {
-  id: 1,
-  dateEntry: Date,
-  dateExit: Date,
+  id: number;
+  dateEntry: Date;
+  dateExit: Date;
   place: string;
   total: number;
   enabled: true;
@@ -9,3 +9,5 @@ export interface Register {
   clientId: number;
   employeId: number;
 }
+
+export type RegisterDTO = Omit<Register, 'id'>;
