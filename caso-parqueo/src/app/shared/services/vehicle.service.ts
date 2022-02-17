@@ -16,8 +16,12 @@ export class VehicleService {
     return this.http.get<Array<Vehicle>>(`${environment.endpoints}/vehicle`);
   }
 
-  getOne(id: number): Observable<Array<Vehicle>> {
-    return this.http.get<Array<Vehicle>>(`${environment.endpoints}/vehicle/${id}`);
+  getOne(id: number): Observable<Vehicle> {
+    return this.http.get<Vehicle>(`${environment.endpoints}/vehicle/${id}`);
+  }
+
+  getOneByLicensePlate(licensePlate: string): Observable<Vehicle> {
+    return this.http.get<Vehicle>(`${environment.endpoints}/vehicle/licensePlate/${licensePlate}`);
   }
 
   create(data: Vehicle): Observable<null> {

@@ -16,8 +16,8 @@ export class ClientService {
     return this.http.get<Array<Client>>(`${environment.endpoints}/client`);
   }
 
-  getOne(id: number): Observable<Array<Client>> {
-    return this.http.get<Array<Client>>(`${environment.endpoints}/client/${id}`);
+  getOne(id: number): Observable<Client> {
+    return this.http.get<Client>(`${environment.endpoints}/client/${id}`);
   }
 
   create(data: Client): Observable<null> {
