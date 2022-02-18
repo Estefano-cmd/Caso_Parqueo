@@ -66,22 +66,22 @@
       <div class="row">
         <div class="col-4" formGroupName="vehicle">
           <h4>Datos del Vehículo</h4>
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Placa</mat-label>
             <input matInput placeholder="Placa" type="text" autocomplete="off" formControlName="licensePlate">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Color</mat-label>
             <input matInput placeholder="Color" type="text" autocomplete="off"  formControlName="color">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Modelo</mat-label>
             <input matInput placeholder="Modelo" type="text" autocomplete="off"  formControlName="model">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Marca</mat-label>
             <input matInput placeholder="Marca" type="text" autocomplete="off"  formControlName="marca">
           </mat-form-field>
@@ -89,12 +89,12 @@
         <div class="col-4" formGroupName="client">
           <h4>Datos del Cliente</h4>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Nombre</mat-label>
             <input matInput placeholder="Nombre" type="text" autocomplete="off"  formControlName="name">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Apellidos</mat-label>
             <input matInput placeholder="Apellidos" type="text" autocomplete="off"  formControlName="surnames">
           </mat-form-field>
@@ -103,7 +103,7 @@
         </div>
         <div class="col-4" *ngIf="isSubscriber" formGroupName="subscriber">
           <h4>Detalle de Abonado</h4>
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select formControlName="subscriptionTypeId">
               <mat-option *ngFor="let type of susbscriptionTypes$|async" [value]="type.id">
@@ -112,23 +112,23 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Email</mat-label>
             <input matInput placeholder="Email" type="text" formControlName="email">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Direccion</mat-label>
             <input matInput placeholder="Direccion" type="text" formControlName="direction">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field class="w-100" appearance="outline">
             <mat-label>Telefono</mat-label>
             <input matInput placeholder="Telefono" type="tel" formControlName="phone">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Fecha</mat-label>
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Fecha de suscripción</mat-label>
             <mat-date-range-input [rangePicker]="picker">
               <input matStartDate placeholder="Start date" formControlName="dateBegin">
               <input matEndDate placeholder="End date" formControlName="dateFinish">
@@ -139,9 +139,11 @@
         </div>
       </div>
       <div class="row">
-        <button class="ml-2" mat-flat-button color="primary" (click)="onSave()">
-          Guardar {{ isSubscriber ? 'Abonado' : 'Visitante' }}
-        </button>
+        <div class="col-12">
+          <button class="ml-2" mat-flat-button color="primary" (click)="onSave()">
+            Guardar {{ isSubscriber ? 'Abonado' : 'Visitante' }}
+          </button>
+        </div>
       </div>
     </form>
   </ng-container>
