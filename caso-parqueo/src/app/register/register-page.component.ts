@@ -27,8 +27,8 @@ export class RegisterPageComponent implements OnInit {
   searchInput = new FormControl();
   searchStarted = false;
   form: FormGroup = this.prepareForm();
-  susbscriptionTypes$ = new BehaviorSubject<Array<SubscriptionType>>([])
-  prices$ = new BehaviorSubject<Array<Price>>([])
+  susbscriptionTypes$ = new BehaviorSubject<Array<SubscriptionType>>([]);
+  prices$ = new BehaviorSubject<Array<Price>>([]);
   session: Session;
   constructor(
     private router: Router,
@@ -44,42 +44,44 @@ export class RegisterPageComponent implements OnInit {
   ) { }
   data$ = new BehaviorSubject<any>(null);
   ngOnInit(): void {
-    this.session = this.sessionService.getSession()
+    this.session = this.sessionService.getSession();
     this.subscriptionTypeService.getAll().subscribe(res => this.susbscriptionTypes$.next(res));
     this.priceService.getAll().subscribe(res => this.prices$.next(res));
   }
 
   toAssign(): void {
-    console.log(this.form.value)
+    console.log(this.form.value);
   }
 
-  onSave() {
-    console.log(this.form.value)
+  getPlace(): string {
+    return 'A1';
+  }
+
+  onSave(): void {
+    console.log(this.form.value);
     const { client, vehicle, subscriber } = this.form.value;
 
     this.clientService.create({ name: client.name, surnames: client.surnames }).pipe(
       switchMap((clientCreated: Client) => this.createVehicle(vehicle, clientCreated).pipe(
         map(() => ({ subscriber, client: clientCreated }))
       )),
-      switchMap(({subscriber, client}: any) => this.createSubscriber(subscriber, client))
+      switchMap((data: any) => this.createSubscriber(data.subscriber, data.client))
     ).subscribe(() => {
-      this.router.navigate(['dashboard'])
-    })
+      this.router.navigate(['dashboard']);
+    });
   }
 
   createVehicle(vehicle: Vehicle, client: Client): Observable<null> {
-    console.log("Guardando vehiculo....", client)
     return this.vehicleService.create({
       licensePlate: vehicle.licensePlate,
       color: vehicle.color,
       model: vehicle.model,
       marca: vehicle.marca,
       clientId: client.id
-    })
+    });
   }
 
   createSubscriber(subscriber: any, client: Client): Observable<null> {
-
     if (this.isSubscriber) {
       return this.subscriberService.create({
         email: subscriber.email,
@@ -94,17 +96,16 @@ export class RegisterPageComponent implements OnInit {
             subscriptionTypeId: subscriber.subscriptionTypeId,
             dateBegin: subscriber.dateBegin,
             dateFinish: subscriber.dateFinish
-          })
+          });
         }),
         switchMap(() => this.createRegister(client))
-      )
+      );
     } else {
-      return this.createRegister(client)
+      return this.createRegister(client);
     }
   }
 
   createRegister(client: Client): Observable<null> {
-    console.log("Guardando registro2....", client)
     return this.registerService.create({
       dateEntry: new Date(),
       dateExit: null,
@@ -114,11 +115,7 @@ export class RegisterPageComponent implements OnInit {
       priceId: this.getPrice(),
       clientId: client.id,
       employeId: this.session?.id || 1,
-    })
-  }
-
-  getPlace() {
-    return "A1"
+    });
   }
 
   searchLicensePlate(): void {
@@ -145,33 +142,34 @@ export class RegisterPageComponent implements OnInit {
   prepareForm(): FormGroup {
     return this.fb.group({
       client: this.fb.group({
-        name: ["", Validators.required],
-        surnames: ["", Validators.required],
+        name: ['', Validators.required],
+        surnames: ['', Validators.required],
         isSubscriber: false
       }),
       vehicle: this.fb.group({
-        licensePlate:["", Validators.required],
-        color: ["", Validators.required],
-        model: ["", Validators.required],
-        marca: ["", Validators.required],
+        licensePlate: ['', Validators.required],
+        color: ['', Validators.required],
+        model: ['', Validators.required],
+        marca: ['', Validators.required],
       }),
       subscriber: this.fb.group({
         subscriptionTypeId: [1],
-        email: [""],
-        direction: [""],
-        phone: [""],
+        email: [''],
+        direction: [''],
+        phone: [''],
         dateBegin: [],
         dateFinish: []
       })
-    })
+    });
   }
 
-  getPrice() {
+  getPrice(): number {
     const prices =  this.prices$.getValue() as Array<Price>;
-    return prices[0].id
+    return prices[0].id;
   }
 
   get isSubscriber(): boolean {
-    return this.form.get('client')['controls'].isSubscriber.value as boolean;
+    // @ts-ignore
+    return this.form.get('client').controls.isSubscriber.value as boolean;
   }
 }
