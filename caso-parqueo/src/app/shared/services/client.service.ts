@@ -20,8 +20,8 @@ export class ClientService {
     return this.http.get<Client>(`${environment.endpoints}/client/${id}`);
   }
 
-  create(data: ClientDTO): Observable<null> {
-    return this.http.post<null>(`${environment.endpoints}/client`, data);
+  create(data: ClientDTO): Observable<Client> {
+    return this.http.post<Client>(`${environment.endpoints}/client`, data);
   }
 
   update(id: number, data: Partial<ClientDTO>): Observable<null> {

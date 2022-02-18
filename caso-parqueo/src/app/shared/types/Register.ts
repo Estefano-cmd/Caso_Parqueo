@@ -4,7 +4,7 @@ export interface Register {
   dateExit: Date;
   place: string;
   total: number;
-  enabled: true;
+  enabled: boolean;
   priceId: number;
   clientId: number;
   employeId: number;

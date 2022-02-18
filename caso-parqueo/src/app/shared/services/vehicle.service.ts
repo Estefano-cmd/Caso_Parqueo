@@ -1,4 +1,4 @@
-import { Vehicle } from './../types/Vehicle';
+import { Vehicle, VehicleDTO } from './../types/Vehicle';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -24,11 +24,11 @@ export class VehicleService {
     return this.http.get<Vehicle>(`${environment.endpoints}/vehicle/licensePlate/${licensePlate}`);
   }
 
-  create(data: Vehicle): Observable<null> {
+  create(data: VehicleDTO): Observable<null> {
     return this.http.post<null>(`${environment.endpoints}/vehicle`, data);
   }
 
-  update(id: number, data: Partial<Vehicle>): Observable<null> {
+  update(id: number, data: Partial<VehicleDTO>): Observable<null> {
     return this.http.patch<null>(`${environment.endpoints}/vehicle/${id}`, data);
   }
 
