@@ -48,9 +48,9 @@ export class LoginComponent implements OnInit {
   handleError(data: HttpErrorResponse): void {
     const { message, name } =  data.error;
     if (name === 'Authentication Error.') {
-      this.snackBar.open(message);
+      this.snackBar.open(message, 'OK');
     } else {
-      this.snackBar.open('Internal Server Error');
+      this.snackBar.open('Internal Server Error', 'OK');
     }
   }
 }
