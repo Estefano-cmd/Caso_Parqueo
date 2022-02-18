@@ -9,7 +9,7 @@ export class SessionService {
   session$: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
   constructor() { }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     const session = this.session$.getValue() as Session;
     return !!(session);
   }
