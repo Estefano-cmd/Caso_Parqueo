@@ -42,6 +42,7 @@ export class RegisterPageComponent implements OnInit {
     private subscriptionService: SubscriptionService,
     private subscriptionTypeService: SubscriptionTypeService
   ) { }
+
   data$ = new BehaviorSubject<any>(null);
   ngOnInit(): void {
     this.session = this.sessionService.getSession();
