@@ -59,7 +59,9 @@ export class RegisterPageComponent implements OnInit {
   }
 
   onSave(): void {
-    console.log(this.form.value);
+    if (!this.form.valid) {
+      return;
+    }
     const { client, vehicle, subscriber } = this.form.value;
 
     this.clientService.create({ name: client.name, surnames: client.surnames }).pipe(
