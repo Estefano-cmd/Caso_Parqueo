@@ -13,11 +13,11 @@ export class SessionGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const isLoggedIn = this.sessionService.isLoggedIn();
 
-    console.log("isLoggedIn", isLoggedIn)
+    console.log('isLoggedIn', isLoggedIn);
     if (isLoggedIn) {
       return true;
     }
-    return this.router.navigate(['/auth/login'])
+    return this.router.navigate(['/auth/login']);
   }
 
 }
