@@ -1,5 +1,5 @@
 import { Employees } from './../../../shared/types/employees';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { EmployeesService } from './../../../shared/services/employees.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -32,11 +32,15 @@ export class RegisterComponent implements OnInit {
     this.form = this.fb.group({
       fullname: ['', Validators.required],
       avatar: [[137, 80, 78, 71], Validators.required],
-      email: ['', Validators.required, Validators.email],
+      email: ['', [Validators.required, Validators.email]],
       direction: ['', Validators.required],
       login: ['', Validators.required],
       password: ['', Validators.required],
     });
+  }
+
+  onLogin() {
+    this.route.navigate(['auth', 'login'])
   }
 
   onSubmit(): void {
@@ -50,7 +54,7 @@ export class RegisterComponent implements OnInit {
     ).subscribe(
       (session: Session) => {
         this.sessionService.setSession(session);
-        this.route.navigate(['/dashboard']);
+        this.route.navigate(['dashboard']);
       },
       ((error: HttpErrorResponse) => this.handleError(error))
     );
