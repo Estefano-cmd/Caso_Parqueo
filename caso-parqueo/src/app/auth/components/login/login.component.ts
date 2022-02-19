@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
     if (name === 'Authentication Error.') {
       this.snackBar.open(message, 'OK');
     } else {
-      this.snackBar.open('Internal Server Error', 'OK');
+      this.snackBar.open('Error de servidor', 'OK');
     }
   }
 }
