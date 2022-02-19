@@ -18,7 +18,7 @@ export class PlaceService {
   getOne(id: number): Observable<Place> {
     return this.http.get<Place>(`${environment.endpoints}/places/${id}`);
   }
- 
+
   getByState(state: boolean): Observable<Place> {
     return this.http.get<Place>(`${environment.endpoints}/places/state/${state}`);
   }

@@ -31,6 +31,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  onRegister(): void {
+    this.route.navigate(['auth/register']);
+  }
+
   onSubmit(): void {
     if (!this.form.valid) {
       return;

@@ -14,4 +14,8 @@ export class EmployeesService {
   getAll(): Observable<Array<Employees>> {
     return this.http.get<Array<Employees>>(`${environment.endpoints}/employees`);
   }
+
+  create(data: any): Observable<Employees> {
+    return this.http.post<Employees>(`${environment.endpoints}/employees`, data);
+  }
 }

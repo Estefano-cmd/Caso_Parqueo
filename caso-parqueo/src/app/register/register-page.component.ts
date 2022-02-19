@@ -52,7 +52,7 @@ export class RegisterPageComponent implements OnInit {
 
   data$ = new BehaviorSubject<any>(null);
   ngOnInit(): void {
-    //this.getPlace()
+    // this.getPlace()
     this.session = this.sessionService.getSession();
     this.subscriptionTypeService.getAll().subscribe(res => this.susbscriptionTypes$.next(res));
     this.priceService.getAll().subscribe(res => this.prices$.next(res));
@@ -64,24 +64,24 @@ export class RegisterPageComponent implements OnInit {
 
   getPlace() {
     this.placeService.getByState(false).subscribe(
-      res =>{
+      res => {
         this.places = res;
-        console.log(res)
+        console.log(res);
         this.updatePlace();
-        return res
+        return res;
       },
-      err => console.log("LUGARES NO CARGADOS")
-    )
-  }  
+      err => console.log('LUGARES NO CARGADOS')
+    );
+  }
   updatePlace(){
     this.placeService.update({state: true}, this.places.id).subscribe(
-      res =>{
-        this.places = res
-        console.log(res)
-        return this.places
+      res => {
+        this.places = res;
+        console.log(res);
+        return this.places;
       },
-      err => console.log("LUGARES NO CARGADOS")
-    )
+      err => console.log('LUGARES NO CARGADOS')
+    );
   }
   onSave(): void {
     if (!this.form.valid) {
@@ -96,7 +96,7 @@ export class RegisterPageComponent implements OnInit {
       switchMap((data: any) => this.createSubscriber(data.subscriber, data.client))
     ).subscribe(() => {
       this.getPlace();
-      window.location.reload();
+      // window.location.reload();
       this.router.navigate(['dashboard']);
     });
   }

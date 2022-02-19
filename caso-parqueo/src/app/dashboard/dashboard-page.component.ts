@@ -8,26 +8,26 @@ import { Place } from '../shared/types/Place';
   styleUrls: ['./dashboard-page.component.scss']
 })
 export class DashboardPageComponent implements OnInit{
-  
-  places: Place[] | any
-  
+
+  places: Place[] | any;
+
   constructor(
-    
+
     private placeService: PlaceService,
 
   ) { }
-  
+
   ngOnInit(): void {
     this.getPlaces();
   }
 
   getPlaces(){
     this.placeService.getAll().subscribe(
-      res =>{
+      res => {
         this.places = res;
       },
-      err => console.log("LUGARES NO CARGADOS")
-    )
+      err => console.log('LUGARES NO CARGADOS')
+    );
   }
 
 }

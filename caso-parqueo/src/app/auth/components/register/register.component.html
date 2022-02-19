@@ -1,1 +1,34 @@
-<p>register works!</p>
+<section class="login-container">
+  <div class="login-card">
+    <div class="login-card-header">
+      <!-- <app-header></app-header> -->
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre Completo</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="fullname" >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email"  formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Direccion</mat-label>
+        <input matInput type="text"  formControlName="direction">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Usuario</mat-label>
+        <input matInput type="text"  formControlName="login">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password"  formControlName="password">
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" [disabled]="form.invalid" type="submit">Registrar</button>
+    </form>
+  </div>
+</section>
