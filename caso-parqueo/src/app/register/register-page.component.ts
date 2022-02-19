@@ -1,3 +1,4 @@
+import { Place } from './../shared/types/Place';
 import { SessionService } from 'src/app/shared/services/session.service';
 import { RegisterService } from './../shared/services/register.service';
 import { SubscriberService } from './../shared/services/subscriber.service';
@@ -7,6 +8,7 @@ import { SubscriptionType } from './../shared/types/SubscriptionType';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from './../shared/services/vehicle.service';
+import { PlaceService } from '../shared/services/place.service.ts.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Vehicle } from '../shared/types/Vehicle';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -17,6 +19,8 @@ import { Price } from '../shared/types/Price';
 import { Subscriber } from '../shared/types/Subscriber';
 import { Session } from '../shared/types/Session';
 import { Router } from '@angular/router';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-register-page',
@@ -30,6 +34,7 @@ export class RegisterPageComponent implements OnInit {
   susbscriptionTypes$ = new BehaviorSubject<Array<SubscriptionType>>([]);
   prices$ = new BehaviorSubject<Array<Price>>([]);
   session: Session;
+  places: Place[] | any ;
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -40,11 +45,13 @@ export class RegisterPageComponent implements OnInit {
     private priceService: PriceService,
     private subscriberService: SubscriberService,
     private subscriptionService: SubscriptionService,
-    private subscriptionTypeService: SubscriptionTypeService
+    private subscriptionTypeService: SubscriptionTypeService,
+    private placeService: PlaceService
   ) { }
 
   data$ = new BehaviorSubject<any>(null);
   ngOnInit(): void {
+    //this.getPlace()
     this.session = this.sessionService.getSession();
     this.subscriptionTypeService.getAll().subscribe(res => this.susbscriptionTypes$.next(res));
     this.priceService.getAll().subscribe(res => this.prices$.next(res));
@@ -54,10 +61,27 @@ export class RegisterPageComponent implements OnInit {
     console.log(this.form.value);
   }
 
-  getPlace(): string {
-    return 'A1';
+  getPlace() {
+    this.placeService.getByState(false).subscribe(
+      res =>{
+        this.places = res;
+        console.log(res)
+        this.updatePlace();
+        return res
+      },
+      err => console.log("LUGARES NO CARGADOS")
+    )
+  }  
+  updatePlace(){
+    this.placeService.update({state: true}, this.places.id).subscribe(
+      res =>{
+        this.places = res
+        console.log(res)
+        return this.places
+      },
+      err => console.log("LUGARES NO CARGADOS")
+    )
   }
-
   onSave(): void {
     if (!this.form.valid) {
       return;
@@ -70,6 +94,8 @@ export class RegisterPageComponent implements OnInit {
       )),
       switchMap((data: any) => this.createSubscriber(data.subscriber, data.client))
     ).subscribe(() => {
+      this.getPlace();
+      window.location.reload();
       this.router.navigate(['dashboard']);
     });
   }
@@ -112,7 +138,7 @@ export class RegisterPageComponent implements OnInit {
     return this.registerService.create({
       dateEntry: new Date(),
       dateExit: null,
-      place: this.getPlace(),
+      place: this.places,
       total: null,
       enabled: true,
       priceId: this.getPrice(),

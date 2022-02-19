@@ -1,27 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { SubscriptionTypeService } from './../shared/services/subscription-type.service';
-import { SubscriptionService } from './../shared/services/subscription.service';
-import { SubscriberService } from './../shared/services/subscriber.service';
-import { PriceService } from '../shared/services/price.service';
-import { RegisterService } from '../shared/services/register.service';
+import { PlaceService } from '../shared/services/place.service.ts.service';
+import { Place } from '../shared/types/Place';
 
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss']
 })
-export class DashboardPageComponent implements OnInit {
-
+export class DashboardPageComponent implements OnInit{
+  
+  places: Place[] | any
+  
   constructor(
-    private priceService: PriceService,
-    private subscriberService: SubscriberService,
-    private subscriptionService: SubscriptionService,
-    private registerService: RegisterService,
-    private subscriptionTypeService: SubscriptionTypeService
-  ) { }
+    
+    private placeService: PlaceService,
 
+  ) { }
+  
   ngOnInit(): void {
-    this.subscriptionTypeService.getAll().subscribe((d) => console.log(d));
+    this.getPlaces();
+  }
+
+  getPlaces(){
+    this.placeService.getAll().subscribe(
+      res =>{
+        this.places = res;
+      },
+      err => console.log("LUGARES NO CARGADOS")
+    )
   }
 
 }
