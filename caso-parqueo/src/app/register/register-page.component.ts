@@ -35,6 +35,7 @@ export class RegisterPageComponent implements OnInit {
   prices$ = new BehaviorSubject<Array<Price>>([]);
   session: Session;
   places: Place[] | any ;
+  categorie$ =  new BehaviorSubject<string>('');
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -165,6 +166,13 @@ export class RegisterPageComponent implements OnInit {
       })
     ).subscribe((data: any) => {
       this.data$.next(data);
+      this.subscriberService.getOne(data.client.id).pipe(
+        switchMap(s => this.subscriptionService.getOne(s?.id)),
+        switchMap(d => this.subscriptionTypeService.getOne(d?.subscriptionTypeId))
+      ).subscribe(r => {
+        const categorie = r ? r.name : 'Visitante';
+        this.categorie$.next(categorie);
+      });
     });
   }
 
@@ -192,9 +200,12 @@ export class RegisterPageComponent implements OnInit {
     });
   }
 
-  getPrice(): number {
-    const prices =  this.prices$.getValue() as Array<Price>;
-    return prices[0].id;
+  getPrice(): number|null {
+    if (this.isSubscriber) {
+      const prices =  this.prices$.getValue() as Array<Price>;
+      return prices[0].id;
+    }
+    return null;
   }
 
   get isSubscriber(): boolean {
