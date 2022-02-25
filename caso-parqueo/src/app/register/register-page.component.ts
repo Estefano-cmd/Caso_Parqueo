@@ -1,3 +1,4 @@
+import { SubscriberType } from './../shared/emuns/subscriberType.enum';
 import { Place } from './../shared/types/Place';
 import { SessionService } from 'src/app/shared/services/session.service';
 import { RegisterService } from './../shared/services/register.service';
@@ -20,6 +21,8 @@ import { Subscriber } from '../shared/types/Subscriber';
 import { Session } from '../shared/types/Session';
 import { Router } from '@angular/router';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Register } from '../shared/types/Register';
 
 
 @Component({
@@ -39,6 +42,7 @@ export class RegisterPageComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private sessionService: SessionService,
     private vehicleService: VehicleService,
     private clientService: ClientService,
@@ -52,38 +56,18 @@ export class RegisterPageComponent implements OnInit {
 
   data$ = new BehaviorSubject<any>(null);
   ngOnInit(): void {
-    // this.getPlace()
     this.session = this.sessionService.getSession();
     this.subscriptionTypeService.getAll().subscribe(res => this.susbscriptionTypes$.next(res));
     this.priceService.getAll().subscribe(res => this.prices$.next(res));
   }
 
   toAssign(): void {
-    console.log(this.form.value);
+    const client = this.data$.getValue()?.client;
+    this.createRegister(client).subscribe((place: Place) => {
+      this.router.navigate(['dashboard'], { queryParams: { place: place.fullname }});
+    });
   }
 
-  getPlace(): void {
-    this.placeService.getByState(false).subscribe(
-      res => {
-        this.places = res;
-        console.log(res);
-        this.updatePlace();
-        return res;
-      },
-      err => console.log('LUGARES NO CARGADOS')
-    );
-  }
-
-  updatePlace(): void {
-    this.placeService.update({state: true}, this.places.id).subscribe(
-      res => {
-        this.places = res;
-        console.log(res);
-        return this.places;
-      },
-      err => console.log('LUGARES NO CARGADOS')
-    );
-  }
   onSave(): void {
     if (!this.form.valid) {
       return;
@@ -95,10 +79,8 @@ export class RegisterPageComponent implements OnInit {
         map(() => ({ subscriber, client: clientCreated }))
       )),
       switchMap((data: any) => this.createSubscriber(data.subscriber, data.client))
-    ).subscribe(() => {
-      this.getPlace();
-      // window.location.reload();
-      this.router.navigate(['dashboard']);
+    ).subscribe((place: Place) => {
+      this.router.navigate(['dashboard'], { queryParams: { place: place.fullname }});
     });
   }
 
@@ -112,7 +94,7 @@ export class RegisterPageComponent implements OnInit {
     });
   }
 
-  createSubscriber(subscriber: any, client: Client): Observable<null> {
+  createSubscriber(subscriber: any, client: Client): Observable<Place> {
     if (this.isSubscriber) {
       return this.subscriberService.create({
         email: subscriber.email,
@@ -136,20 +118,59 @@ export class RegisterPageComponent implements OnInit {
     }
   }
 
-  createRegister(client: Client): Observable<null> {
-    return this.registerService.create({
-      dateEntry: new Date(),
-      dateExit: null,
-      place: this.places,
-      total: null,
-      enabled: true,
-      priceId: this.getPrice(),
-      clientId: client.id,
-      employeId: this.session?.id || 1,
-    });
+  setAvailablePlace(subscriberType: string, avaliablePlaces: Array<Place>): Place {
+    const aPlaces = avaliablePlaces.filter((place: Place) => place.fullname.includes('A'));
+    const bPlaces = avaliablePlaces.filter((place: Place) => !place.fullname.includes('A'));
+
+    if (subscriberType === SubscriberType.ABONADO_VIP) {
+      if (aPlaces.length === 0) {
+        return bPlaces[0];
+      }
+      return aPlaces[0];
+    }
+    else {
+      // VISITANTE o ABONADO VIP
+      return bPlaces[0];
+    }
+  }
+
+  createRegister(client: Client): Observable<Place> {
+    return this.placeService.getAvailablePlaces(false).pipe(
+      switchMap((avaliablePlaces) => {
+        if (avaliablePlaces.length === 0) {
+          this.snackBar.open('NO HAY ESPACIOS DISPONIBLES EN EL PARQUEO!', 'OK');
+          return;
+        }
+
+        const category = this.categorie$.getValue();
+        const place = this.setAvailablePlace(category, avaliablePlaces);
+
+        return this.registerService.create({
+          dateEntry: new Date(),
+          dateExit: null,
+          place: place.fullname,
+          total: null,
+          enabled: true,
+          priceId: this.getPrice(),
+          clientId: client.id,
+          employeId: this.session?.id || 1,
+        }).pipe(
+          switchMap(() => this.placeService.update({state: true}, place.id).pipe(
+            map(() => place)
+          ))
+        );
+      })
+    );
   }
 
   searchLicensePlate(): void {
+    // @ts-ignore
+    this.form.patchValue({
+      vehicle: {
+        licensePlate: this.searchInput.value,
+      },
+    });
+
     this.vehicleService.getOneByLicensePlate(this.searchInput.value).pipe(
       tap(() => this.searchStarted = true),
       switchMap((vehicle: Vehicle) => {
@@ -164,10 +185,21 @@ export class RegisterPageComponent implements OnInit {
             };
           })
         );
+      }),
+      switchMap((data: any) => {
+        return this.registerService.getOneByClientId(data.client.id).pipe(
+          map((register: Register) => {
+            return {
+              ...data,
+              register
+            };
+          })
+        );
       })
     ).subscribe((data: any) => {
+      console.log(data);
       this.data$.next(data);
-      this.subscriberService.getOne(data.client.id).pipe(
+      this.subscriberService.getOne(data?.client?.id).pipe(
         switchMap(s => this.subscriptionService.getOne(s?.id)),
         switchMap(d => this.subscriptionTypeService.getOne(d?.subscriptionTypeId))
       ).subscribe(r => {
@@ -202,11 +234,14 @@ export class RegisterPageComponent implements OnInit {
   }
 
   getPrice(): number|null {
-    if (this.isSubscriber) {
+    const subscriberType = this.categorie$.getValue();
+    console.log(!this.isSubscriber, subscriberType);
+    if (!this.isSubscriber && subscriberType === SubscriberType.VISITANTE) {
       const prices =  this.prices$.getValue() as Array<Price>;
       return prices[0].id;
+    } else {
+      return null;
     }
-    return null;
   }
 
   get isSubscriber(): boolean {

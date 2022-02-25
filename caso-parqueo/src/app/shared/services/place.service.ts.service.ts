@@ -19,8 +19,8 @@ export class PlaceService {
     return this.http.get<Place>(`${environment.endpoints}/places/${id}`);
   }
 
-  getByState(state: boolean): Observable<Place> {
-    return this.http.get<Place>(`${environment.endpoints}/places/state/${state}`);
+  getAvailablePlaces(state: boolean): Observable<Array<Place>> {
+    return this.http.get<Array<Place>>(`${environment.endpoints}/places/state/${state}`);
   }
 
   create(data: PlaceDTO): Observable<Place> {

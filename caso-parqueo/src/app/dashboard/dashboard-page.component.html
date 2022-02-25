@@ -13,7 +13,7 @@
                 </div>
             </ng-template>
             <ng-template #espacioRojo >
-                <div [value]="place.id" class="card place-not-available">
+                <div [value]="place.id" class="card place-not-available" (click)="onInfoClient(place)">
                     {{ place.fullname }}
                 </div>
             </ng-template>

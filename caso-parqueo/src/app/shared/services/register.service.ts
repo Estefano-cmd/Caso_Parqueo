@@ -19,6 +19,14 @@ export class RegisterService {
     return this.http.get<Register>(`${environment.endpoints}/register/${id}`);
   }
 
+  getOneByClientId(id: number): Observable<Register> {
+    return this.http.get<Register>(`${environment.endpoints}/register/client/${id}`);
+  }
+
+  getOneByPlace(place: string): Observable<Register> {
+    return this.http.get<Register>(`${environment.endpoints}/register/place/${place}`);
+  }
+
   create(data: RegisterDTO): Observable<null> {
     return this.http.post<null>(`${environment.endpoints}/register`, data);
   }

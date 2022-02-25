@@ -10,7 +10,6 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   .card {
-    cursor: pointer;
     width:80px;
     height: 80px;
     display: flex;
@@ -26,6 +25,7 @@
   }
   .place-not-available {
     background-color: #E75A5A;
+    cursor: pointer;
   }
 }
 
