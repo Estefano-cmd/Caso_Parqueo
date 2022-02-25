@@ -1,4 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BehaviorSubject } from 'rxjs';
 import { PlaceService } from '../shared/services/place.service.ts.service';
 import { Place } from '../shared/types/Place';
 
@@ -8,26 +11,44 @@ import { Place } from '../shared/types/Place';
   styleUrls: ['./dashboard-page.component.scss']
 })
 export class DashboardPageComponent implements OnInit{
-
-  places: Place[] | any;
-
+  placesAll$ = new BehaviorSubject<Array<Place>>([]);
+  currentPlaces = [];
+  types = ['A', 'B', 'C', 'D', 'E'];
+  activeType = this.types[0];
   constructor(
-
+    private snackBar: MatSnackBar,
     private placeService: PlaceService,
-
   ) { }
 
   ngOnInit(): void {
     this.getPlaces();
   }
 
-  getPlaces(){
+  getPlaces(): void {
     this.placeService.getAll().subscribe(
-      res => {
-        this.places = res;
+      (places: Array<Place>) => {
+        this.placesAll$.next(places);
+        this.setCurrentPlaces(places);
       },
-      err => console.log('LUGARES NO CARGADOS')
+      (error) => this.handleError(error)
     );
   }
 
+  onChangeType(type: string): void {
+    this.activeType = type;
+    const places =  this.placesAll$.getValue() as Array<Place>;
+    this.setCurrentPlaces(places, type);
+  }
+
+  setCurrentPlaces(places: Array<Place>, type: string = 'A'): void {
+    this.currentPlaces = places.filter((place: Place) => {
+      const types =  place.fullname.match(/[A-Za-z]+/g);
+      return types.includes(type);
+    });
+    console.log(this.currentPlaces);
+  }
+
+  handleError(data: HttpErrorResponse): void {
+    this.snackBar.open('Error de servidor', 'OK');
+  }
 }

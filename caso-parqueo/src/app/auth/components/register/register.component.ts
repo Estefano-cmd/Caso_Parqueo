@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onLogin() {
+  onLogin(): void {
     this.route.navigate(['auth', 'login']);
   }
 

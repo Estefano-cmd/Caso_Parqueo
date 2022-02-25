@@ -62,7 +62,7 @@ export class RegisterPageComponent implements OnInit {
     console.log(this.form.value);
   }
 
-  getPlace() {
+  getPlace(): void {
     this.placeService.getByState(false).subscribe(
       res => {
         this.places = res;
@@ -73,7 +73,8 @@ export class RegisterPageComponent implements OnInit {
       err => console.log('LUGARES NO CARGADOS')
     );
   }
-  updatePlace(){
+
+  updatePlace(): void {
     this.placeService.update({state: true}, this.places.id).subscribe(
       res => {
         this.places = res;

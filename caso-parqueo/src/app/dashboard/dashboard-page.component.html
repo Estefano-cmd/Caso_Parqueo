@@ -1,26 +1,22 @@
 <div class="dashboard-container">
-    <div class="menu-container">
-        <ul class="menu-items">
-            <li class="menu-item" id="piso-1">Piso 1</li>
-            <li class="menu-item" id="piso-2">Piso 2</li>
-            <li class="menu-item" id="piso-3">Piso 3</li>
-            <li class="menu-item" id="piso-4">Piso 4</li>
-            <li class="menu-item" id="piso-5">Piso 5</li>
-        </ul>
-    </div>
-    <div class="espacios-disponibles" #piso1 >
-        <div *ngFor="let place of places">
-            <div *ngIf="place.state == 0; then espacio else espacioRojo"></div>
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let type of types"
+       (click)="onChangeType(type)"
+       [active]="activeType == type"> {{type}} </a>
+  </nav>
+    <div class="places-available-container mt-4" #piso1 >
+        <ng-container *ngFor="let place of currentPlaces">
+            <ng-container *ngIf="place.state == 0; then espacio else espacioRojo"></ng-container>
             <ng-template #espacio >
-                <div [value]="place.id" class="espacio">
+                <div [value]="place.id" class="card place-available">
                     {{ place.fullname }}
                 </div>
             </ng-template>
             <ng-template #espacioRojo >
-                <div [value]="place.id" class="espacioRojo">
+                <div [value]="place.id" class="card place-not-available">
                     {{ place.fullname }}
                 </div>
             </ng-template>
-        </div>
+        </ng-container>
     </div>
 </div>
