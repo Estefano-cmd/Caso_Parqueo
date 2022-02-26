@@ -61,10 +61,14 @@ export class RegisterPageComponent implements OnInit {
     this.priceService.getAll().subscribe(res => this.prices$.next(res));
   }
 
+  onDashboard(place: string): void {
+    this.router.navigate(['dashboard'], { queryParams: { place }});
+  }
+
   toAssign(): void {
     const client = this.data$.getValue()?.client;
     this.createRegister(client).subscribe((place: Place) => {
-      this.router.navigate(['dashboard'], { queryParams: { place: place.fullname }});
+      this.router.navigate(['dashboard'], { queryParams: { place: place.name }});
     });
   }
 
@@ -80,7 +84,7 @@ export class RegisterPageComponent implements OnInit {
       )),
       switchMap((data: any) => this.createSubscriber(data.subscriber, data.client))
     ).subscribe((place: Place) => {
-      this.router.navigate(['dashboard'], { queryParams: { place: place.fullname }});
+      this.router.navigate(['dashboard'], { queryParams: { place: place.name }});
     });
   }
 
@@ -119,8 +123,8 @@ export class RegisterPageComponent implements OnInit {
   }
 
   setAvailablePlace(subscriberType: string, avaliablePlaces: Array<Place>): Place {
-    const aPlaces = avaliablePlaces.filter((place: Place) => place.fullname.includes('A'));
-    const bPlaces = avaliablePlaces.filter((place: Place) => !place.fullname.includes('A'));
+    const aPlaces = avaliablePlaces.filter((place: Place) => place.name.includes('A'));
+    const bPlaces = avaliablePlaces.filter((place: Place) => !place.name.includes('A'));
 
     if (subscriberType === SubscriberType.ABONADO_VIP) {
       if (aPlaces.length === 0) {
@@ -148,14 +152,14 @@ export class RegisterPageComponent implements OnInit {
         return this.registerService.create({
           dateEntry: new Date(),
           dateExit: null,
-          place: place.fullname,
+          placeId: place.id,
           total: null,
           enabled: true,
           priceId: this.getPrice(),
           clientId: client.id,
           employeId: this.session?.id || 1,
         }).pipe(
-          switchMap(() => this.placeService.update({state: true}, place.id).pipe(
+          switchMap(() => this.placeService.update({state: true}, place?.id).pipe(
             map(() => place)
           ))
         );
@@ -187,7 +191,7 @@ export class RegisterPageComponent implements OnInit {
         );
       }),
       switchMap((data: any) => {
-        return this.registerService.getOneByClientId(data.client.id).pipe(
+        return this.registerService.getOneByClientId(data?.client?.id).pipe(
           map((register: Register) => {
             return {
               ...data,
@@ -235,13 +239,27 @@ export class RegisterPageComponent implements OnInit {
 
   getPrice(): number|null {
     const subscriberType = this.categorie$.getValue();
-    console.log(!this.isSubscriber, subscriberType);
+
     if (!this.isSubscriber && subscriberType === SubscriberType.VISITANTE) {
       const prices =  this.prices$.getValue() as Array<Price>;
-      return prices[0].id;
+      return prices[0]?.id || 5;
     } else {
       return null;
     }
+  }
+
+  get isAsigned(): boolean {
+    const data = this.data$.getValue();
+    // console.log("asigned", data)
+    if (data === null || data.register === null) {
+      return false;
+    }
+    if (data?.register?.dateExit === null) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   get isSubscriber(): boolean {

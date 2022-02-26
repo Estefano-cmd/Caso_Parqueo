@@ -45,9 +45,17 @@ export class DashboardPageComponent implements OnInit {
   }
 
   onInfoClient(place: Place): void {
-    this.register.getOneByPlace(place.fullname).subscribe((data) => {
-      this.dialog.open(InfoComponent, {
+    this.register.getOneByPlaceId(place.id).subscribe((data) => {
+      console.log(data);
+      const dialogRef = this.dialog.open(InfoComponent, {
         data
+      });
+
+      dialogRef.afterClosed().subscribe((update) => {
+        if (update) {
+          this.activeType = (place.name?.match(/[A-Za-z]+/g)[0] || 'A').toUpperCase();
+          this.getPlaces();
+        }
       });
     });
   }
@@ -60,7 +68,7 @@ export class DashboardPageComponent implements OnInit {
 
   setCurrentPlaces(places: Array<Place>, type: string = 'A'): void {
     this.currentPlaces = places.filter((place: Place) => {
-      const types = place.fullname.match(/[A-Za-z]+/g);
+      const types = place.name.match(/[A-Za-z]+/g);
       return types.includes(type);
     });
   }

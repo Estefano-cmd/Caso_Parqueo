@@ -9,6 +9,7 @@ import { RegisterService } from '../../../shared/services/register.service';
 import { SubscriptionService } from '../../../shared/services/subscription.service';
 import { Price } from '../../../shared/types/Price';
 import { PlaceService } from '../../../shared/services/place.service.ts.service';
+import { Place } from '../../../shared/types/Place';
 
 @Component({
   selector: 'app-info',
@@ -29,6 +30,7 @@ export class InfoComponent implements OnInit {
      ) { }
 
   ngOnInit(): void {
+    console.log(this.data);
   }
 
   onCheckOut(): void {
@@ -50,8 +52,9 @@ export class InfoComponent implements OnInit {
             total: this.calculateTotalByClient(subscriberType, hours, +price?.amount)
           });
         }),
+        switchMap(() => this.placeService.update({ state: false}, this.data.placeId))
       ).subscribe(() => {
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       });
     });
   }

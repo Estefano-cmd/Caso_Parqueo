@@ -2,7 +2,7 @@ export interface Register {
   id: number;
   dateEntry: Date;
   dateExit: Date;
-  place: string;
+  placeId: number;
   total: number;
   enabled: boolean;
   priceId: number;

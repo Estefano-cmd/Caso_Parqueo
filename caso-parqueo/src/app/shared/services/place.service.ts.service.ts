@@ -19,6 +19,10 @@ export class PlaceService {
     return this.http.get<Place>(`${environment.endpoints}/places/${id}`);
   }
 
+  getOneByName(name: string): Observable<Place> {
+    return this.http.get<Place>(`${environment.endpoints}/places/name/${name}`);
+  }
+
   getAvailablePlaces(state: boolean): Observable<Array<Place>> {
     return this.http.get<Array<Place>>(`${environment.endpoints}/places/state/${state}`);
   }

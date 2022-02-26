@@ -1,7 +1,9 @@
 export interface Place {
   id: number;
-  fullname: string;
+  name: string;
   state: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type PlaceDTO = Omit<Place, 'id'>;

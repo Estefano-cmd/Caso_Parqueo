@@ -9,12 +9,12 @@
             <ng-container *ngIf="place.state == 0; then espacio else espacioRojo"></ng-container>
             <ng-template #espacio >
                 <div [value]="place.id" class="card place-available">
-                    {{ place.fullname }}
+                    {{ place.name }}
                 </div>
             </ng-template>
             <ng-template #espacioRojo >
                 <div [value]="place.id" class="card place-not-available" (click)="onInfoClient(place)">
-                    {{ place.fullname }}
+                    {{ place.name }}
                 </div>
             </ng-template>
         </ng-container>

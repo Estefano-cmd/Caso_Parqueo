@@ -10,7 +10,7 @@
       <button class="search-btn" mat-flat-button color="accent" (click)="searchLicensePlate()">
         Buscar
       </button>
-      <button  class="ml-2" [disabled]="!state.data?.client || state.data?.register" mat-flat-button color="primary" (click)="toAssign()">
+      <button  class="ml-2" [disabled]="!state.data || isAsigned || !state.data?.vehicle" mat-flat-button color="primary" (click)="toAssign()">
         Asignar
       </button>
     </div>
@@ -24,7 +24,7 @@
           <h2>{{ this.searchInput?.value ? ( this.searchInput?.value|uppercase) : "--- ---" }}</h2>
         </div>
       </div>
-      <ng-container *ngIf="state.data?.vehicle === null; else data">
+      <ng-container *ngIf="!state.data?.vehicle; else data">
         <div *ngIf="searchStarted" class="alert alert-error">
           <span>Placa No Registada</span>
         </div>
@@ -36,14 +36,14 @@
       </ng-template>
     </div>
   </div>
-  <ng-container *ngIf="searchStarted && state.data?.vehicle !== null">
+  <ng-container *ngIf="searchStarted && state.data?.vehicle">
     <div class="row mt-4">
       <div class="col-6"></div>
       <div class="col-6">
         <div class="row">
           <div class="col-6">
             <h4>CLIENTE</h4>
-            <span>{{state.data?.client.name}} {{state.data?.client.surnames}}</span>
+            <span>{{state.data?.client?.name}} {{state.data?.client?.surnames}}</span>
           </div>
           <div class="col-6">
             <h4>CATEGORÍA</h4>
@@ -53,19 +53,19 @@
         <div class="row">
           <div class="col-6">
             <h4>VEHÍCULO</h4>
-            <span class="d-block">Marca: {{state.data?.vehicle.marca}}</span>
-            <span class="d-block">Modelo: {{state.data?.vehicle.model}}</span>
-            <span class="d-block">Color: {{state.data?.vehicle.color}}</span>
+            <span class="d-block">Marca: {{state.data?.vehicle?.marca}}</span>
+            <span class="d-block">Modelo: {{state.data?.vehicle?.model}}</span>
+            <span class="d-block">Color: {{state.data?.vehicle?.color}}</span>
           </div>
-          <div class="col-6" *ngIf="state.data?.register">
+          <div class="col-6" *ngIf="isAsigned">
             <h4>LUGAR ASIGNADO</h4>
-            <span class="d-block">{{state.data?.register?.place| uppercase}}</span>
+            <span class="d-block c-pointer" (click)="onDashboard(state.data?.register?.place?.name)">{{state.data?.register?.place?.name| uppercase}}</span>
           </div>
         </div>
       </div>
     </div>
   </ng-container>
-  <ng-container *ngIf="searchStarted && state.data?.vehicle === null">
+  <ng-container *ngIf="searchStarted && !state.data?.vehicle">
     <form [formGroup]="form">
       <div class="row">
         <div class="col-4" formGroupName="vehicle">
